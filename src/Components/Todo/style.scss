@@ -1,0 +1,486 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap");
+
+$BrightBlue: hsl(220, 98%, 61%);
+$CheckBackground: linear-gradient(
+  -45deg,
+  hsl(192, 100%, 67%),
+  hsl(280, 87%, 65%)
+);
+.light {
+  --VeryLightGray: hsl(0, 0%, 98%);
+  --VeryLightGrayishBlue: hsl(236, 33%, 92%);
+  --LightGrayishBlue: hsl(233, 11%, 84%);
+  --DarkGrayishBlue: hsl(236, 9%, 61%);
+  --VeryDarkGrayishBlue: hsl(235, 19%, 35%);
+}
+
+.dark {
+  --VeryDarkBlue: hsl(235, 21%, 11%);
+  --VeryDarkDesaturatedBlue: hsl(235, 24%, 19%);
+  --LightGrayishBlue: hsl(234, 39%, 85%);
+  --LightGrayishBlue: hsl(236, 33%, 92%);
+  --DarkGrayishBlue: hsl(234, 11%, 52%);
+  --VeryDarkGrayishBlue: hsl(233, 14%, 35%);
+  --VeryDarkGrayishBlue: hsl(237, 14%, 26%);
+}
+
+$input-height: 3em;
+
+.todo {
+  font-family: "Josefin Sans", sans-serif;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  font-size: 18px;
+  color: var(--LightGrayishBlue);
+  background-color: var(--VeryDarkGrayishBlue);
+  background-color: var(--VeryDarkBlue);
+
+  img {
+    min-height: 30vh;
+    width: 100vw;
+    object-fit: cover;
+  }
+
+  .container {
+    position: absolute;
+    inset: 0;
+    top: 10%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-inline: auto;
+    width: clamp(20em, 80vw + 10vw, 30vw);
+    height: fit-content;
+
+    .header {
+      display: flex;
+      align-items: center;
+      height: fit-content;
+      width: 100%;
+      color: hsl(0, 0%, 98%);
+      color: var(--VeryDarkBlue);
+      color: var(--VeryLightGray);
+
+      h1 {
+        font-size: 2.2em;
+        font-weight: 700;
+      }
+
+      .icon {
+        margin-left: auto;
+        height: 1.5em;
+        width: 1.5em;
+        svg {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .inputbox {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: $input-height;
+      width: 100%;
+      margin: 1.5em 0 0.5em 0;
+      isolation: isolate;
+
+      input[type="text"] {
+        width: 100%;
+        height: 100%;
+        border-radius: 0.2em;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        font-size: 18px;
+        text-indent: 3%;
+        outline: none;
+        border: none;
+      }
+
+      .checkbox {
+        position: relative;
+        height: 3em;
+        width: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border-top-left-radius: 0.2em;
+        border-bottom-left-radius: 0.2em;
+
+        input[type="checkbox"] {
+          appearance: none;
+          height: 1em;
+          width: 1em;
+          z-index: 3;
+          cursor: pointer;
+        }
+
+        label {
+          position: absolute;
+          top: 50%;
+          transform: translate(0, -50%);
+          z-index: 2;
+          height: 0.3em;
+          width: 0.3em;
+          padding: 0.5em 0.5em;
+          border-radius: 50%;
+          border: solid 1px hsl(210, 12%, 84%);
+          background-color: white;
+
+          &::before {
+            position: absolute;
+            right: 35%;
+            top: 28%;
+            content: "";
+            height: 10px;
+            width: 2px;
+            border-radius: 100px;
+            background-color: white;
+            transform: rotate(45deg);
+          }
+
+          &::after {
+            position: absolute;
+            top: 49%;
+            left: 32%;
+            content: "";
+            height: 5px;
+            width: 2px;
+            border-radius: 100px;
+            background-color: white;
+            transform: rotate(-45deg);
+          }
+        }
+
+        .hoverstate {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          height: 1.1em;
+          width: 1.1em;
+          transition: all 0.3s;
+          background-image: $CheckBackground;
+          border-radius: 50%;
+          z-index: 1;
+
+          display: none;
+        }
+
+        input[type="checkbox"]:checked ~ label {
+          border: 0;
+          background-image: $CheckBackground;
+        }
+
+        input[type="checkbox"]:hover ~ .hoverstate {
+          display: block;
+        }
+        input[type="checkbox"]:checked ~ .hoverstate {
+          display: none;
+        }
+        input[type="checkbox"]:hover ~ label {
+          border: 0;
+        }
+      }
+    }
+
+    .output {
+      margin-top: 1em;
+      width: 100%;
+      height: max-content;
+      border-radius: 0.2em;
+      box-shadow: 0 0 5px 0 hsl(233, 11%, 84%);
+      position: relative;
+      background-color: white;
+
+      small {
+        position: absolute;
+        top: 110%;
+        min-width: 100%;
+        text-align: center;
+        color: var(--DarkGrayishBlue);
+        margin: 2em 0;
+      }
+
+      .out {
+        max-height: 50vh;
+        overflow: hidden;
+
+        .todoitem {
+          margin: 0.1em 0;
+          height: $input-height;
+          border-bottom: solid hsl(233, 11%, 84%) 1px;
+          display: flex;
+          align-items: center;
+
+          li {
+            margin-left: 1em;
+            font-size: 18px;
+            color: var(--VeryDarkGrayishBlue);
+            font-weight: 700;
+            transition: all 0.3s;
+          }
+          .finished {
+            text-decoration: line-through;
+            color: var(--DarkGrayishBlue);
+          }
+
+          .check {
+            height: 100%;
+            width: $input-height;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            input[type="checkbox"] {
+              appearance: none;
+              height: 1em;
+              width: 1em;
+              z-index: 3;
+              cursor: pointer;
+            }
+
+            label {
+              position: absolute;
+              top: 50%;
+              transform: translate(0, -50%);
+              z-index: 2;
+              height: 0.3em;
+              width: 0.3em;
+              padding: 0.5em;
+              border-radius: 50%;
+              border: solid 1px hsl(210, 12%, 84%);
+              background-color: white;
+
+              &::before {
+                position: absolute;
+                right: 35%;
+                top: 28%;
+                content: "";
+                height: 10px;
+                width: 2px;
+                border-radius: 100px;
+                background-color: white;
+                transform: rotate(45deg);
+              }
+
+              &::after {
+                position: absolute;
+                top: 50%;
+                left: 31%;
+                content: "";
+                height: 5px;
+                width: 2px;
+                border-radius: 100px;
+                background-color: white;
+                transform: rotate(-45deg);
+              }
+            }
+
+            .hoverstate {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              height: 1.15em;
+              width: 1.15em;
+              transition: all 0.3s;
+              background-image: $CheckBackground;
+              border-radius: 50%;
+              z-index: 1;
+              display: none;
+            }
+
+            input[type="checkbox"]:hover ~ .hoverstate {
+              display: block;
+            }
+            input[type="checkbox"][focused="true"]:checked ~ .hoverstate {
+              display: none;
+            }
+            input[type="checkbox"][focused="true"]:checked ~ label {
+              border: 0;
+              background-image: $CheckBackground;
+            }
+            input[type="checkbox"]:hover ~ label {
+              border: 0;
+            }
+          }
+          @keyframes smoothIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+
+          span {
+            margin-left: auto;
+            margin-right: 1em;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 0.5em;
+            position: relative;
+            animation: smoothIn 1s;
+
+            &::before {
+              position: absolute;
+              content: "";
+              inset: 0;
+              height: 100%;
+              width: 0.1em;
+              background-color: hsl(236, 9%, 61%);
+              transform: rotate(45deg);
+              border-radius: 0.2em;
+            }
+            &::after {
+              position: absolute;
+              content: "";
+              inset: 0;
+              height: 100%;
+              width: 0.1em;
+              background-color: hsl(236, 9%, 61%);
+              transform: rotate(-45deg);
+              border-radius: 0.2em;
+            }
+          }
+        }
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background-color: hsl(0, 0%, 98%);
+        height: $input-height;
+        padding: 0 1em;
+
+        .left {
+          p {
+            font-size: 13px;
+            font-weight: 400;
+            color: hsl(236, 9%, 61%);
+          }
+        }
+
+        .center {
+          button {
+            outline: 0;
+            border: 0;
+            background-color: transparent;
+            margin: 0 0.5em;
+            font-weight: 700;
+            color: hsl(236, 9%, 61%);
+            cursor: pointer;
+            transition: color 0.3s;
+            &:hover {
+              color: $BrightBlue;
+            }
+          }
+        }
+        .right {
+          button {
+            outline: 0;
+            border: 0;
+            background-color: transparent;
+            cursor: pointer;
+            font-weight: 400;
+            color: hsl(236, 9%, 61%);
+            transition: color 0.3s;
+            &:hover {
+              color: $BrightBlue;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and(max-width:650px) {
+  $line-height: 2.6em;
+
+  .container {
+  top: 5% !important;
+
+
+    .header{
+      h1 {
+        font-size: 1.5em !important;
+      }
+
+      .icon {
+        margin-left: auto;
+        height: 1.5em;
+        width: 1.5em;
+        svg {
+          cursor: pointer;
+        }
+      }
+
+  }
+
+
+
+  .controls {
+    position: relative;
+
+
+    }
+  
+
+    .left {
+      flex: 1;
+    }
+    .right {
+      flex: 1;
+      display: inline-flex;
+      justify-content: flex-end;
+    }
+
+    .center {
+      position: absolute;
+      left: 0;
+      bottom: -150%;
+      height: 90%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0 0 10px 0 hsl(233, 11%, 84%);
+      border-radius: 0.2em;
+    }
+  }
+  .container {
+    height: 30em;
+    width: 90vw !important;
+    .output {
+      height: 100%;
+      width: 100%;
+
+      .info {
+        margin: 2em 0;
+        bottom: -80%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .out {
+        // min-height: 35vh !important;
+        max-height: 38vh !important;
+
+        .todoitem {
+          height: 2.5em !important;
+        }
+      }
+    }
+  }
+}
