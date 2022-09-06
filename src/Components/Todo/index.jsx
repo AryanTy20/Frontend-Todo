@@ -189,6 +189,7 @@ const Todo = () => {
               </div>
               <div className="center">
                 <button
+                  className={!showComplete ? "active" : ""}
                   onClick={() => {
                     setIsScrollable(!isScrollable);
                     setShowComplete(false);
@@ -197,7 +198,12 @@ const Todo = () => {
                   All
                 </button>
                 <button>Active</button>
-                <button onClick={() => setShowComplete(true)}>Completed</button>
+                <button
+                  className={showComplete ? "active" : ""}
+                  onClick={() => setShowComplete(true)}
+                >
+                  Completed
+                </button>
               </div>
               <div className="right">
                 <button

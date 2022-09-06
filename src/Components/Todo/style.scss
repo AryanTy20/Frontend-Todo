@@ -17,6 +17,7 @@ $CheckBackground: linear-gradient(
   --inputBg: var(--VeryLightGray);
   --controlColor: var(--DarkGrayishBlue);
   --borderColor: var(--LightGrayishBlue);
+  --controlHover: var(--VeryDarkGrayishBlue);
 }
 
 .dark {
@@ -32,6 +33,7 @@ $CheckBackground: linear-gradient(
   --inputBg: var(--VeryDarkDesaturatedBlue);
   --controlColor: var(--DarkGrayishBlue);
   --borderColor: var(--VeryDarkGrayishBlue);
+  --controlHover: var(--LightGrayishBlue);
 }
 $input-height: 3.8em;
 
@@ -43,43 +45,6 @@ $input-height: 3.8em;
     opacity: 1;
   }
 }
-
-// @mixin listoutput {
-//   height: 100%;
-//   width: $input-height;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   position: relative;
-
-//   input[type="checkbox"] {
-//     appearance: none;
-//     height: 1em;
-//     width: 1em;
-//     z-index: 4;
-//     cursor: pointer;
-//   }
-
-//   .tick {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     z-index: 2;
-//   }
-
-//   label {
-//     position: absolute;
-//     top: 50%;
-//     transform: translate(0, -50%);
-//     z-index: 2;
-//     height: 1.4em;
-//     width: 1.4em;
-//     padding: 0.5em;
-//     border-radius: 50%;
-//     border: solid 1px var(--borderColor);
-//     background-color: var(--inputBg);
-// }
 
 .todo {
   font-family: "Josefin Sans", sans-serif;
@@ -305,7 +270,7 @@ $input-height: 3.8em;
               top: 50%;
               left: 50%;
               transform: translate(-50%, -50%);
-              z-index: 2;
+              z-index: 1;
             }
 
             label {
@@ -413,64 +378,6 @@ $input-height: 3.8em;
             // }
           }
         }
-
-        // .completed {
-        //   li {
-        //     margin: 0.1em 0;
-        //     height: $input-height;
-        //     border-bottom: solid 1px var(--borderColor);
-        //     display: flex;
-        //     align-items: center;
-        //     font-size: 1rem;
-        //     animation: smoothIn 1s;
-
-        //     .check {
-        //       height: 100%;
-        //       width: $input-height;
-        //       display: flex;
-        //       align-items: center;
-        //       justify-content: center;
-        //       position: relative;
-
-        //       input[type="checkbox"] {
-        //         appearance: none;
-        //         height: 1em;
-        //         width: 1em;
-        //         z-index: 4;
-        //         cursor: pointer;
-        //       }
-
-        //       .tick {
-        //         position: absolute;
-        //         top: 50%;
-        //         left: 50%;
-        //         transform: translate(-50%, -50%);
-        //         z-index: 2;
-        //       }
-
-        //       label {
-        //         position: absolute;
-        //         top: 50%;
-        //         transform: translate(0, -50%);
-        //         z-index: 2;
-        //         height: 1.4em;
-        //         width: 1.4em;
-        //         padding: 0.5em;
-        //         border-radius: 50%;
-        //         border: solid 1px var(--borderColor);
-        //         background-color: var(--inputBg);
-        //       }
-
-        //       input[type="checkbox"]:checked ~ .tick {
-        //         z-index: 3;
-        //       }
-        //       input[type="checkbox"]:checked ~ label {
-        //         border: 0;
-        //         background-image: $CheckBackground;
-        //       }
-        //     }
-        //   }
-        // }
       }
 
       .controls {
@@ -496,6 +403,11 @@ $input-height: 3.8em;
         .center {
           flex: 1.5;
           text-align: center;
+
+          .active {
+            color: $BrightBlue;
+          }
+
           button {
             outline: 0;
             border: 0;
@@ -507,7 +419,7 @@ $input-height: 3.8em;
             transition: color 0.3s;
 
             &:is(:active, :hover) {
-              color: $BrightBlue;
+              color: var(--controlHover);
             }
           }
         }
@@ -523,8 +435,8 @@ $input-height: 3.8em;
             color: var(--controlColor);
             transition: color 0.3s;
 
-            &:hover {
-              color: $BrightBlue;
+            &:is(:active, :hover) {
+              color: var(--controlHover);
             }
           }
         }
