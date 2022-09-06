@@ -12,6 +12,11 @@ $CheckBackground: linear-gradient(
   --LightGrayishBlue: hsl(233, 11%, 84%);
   --DarkGrayishBlue: hsl(236, 9%, 61%);
   --VeryDarkGrayishBlue: hsl(235, 19%, 35%);
+
+  --textColor: var(--VeryDarkGrayishBlue);
+  --inputBg: var(--VeryLightGray);
+  --controlColor: var(--DarkGrayishBlue);
+  --borderColor: var(--LightGrayishBlue);
 }
 
 .dark {
@@ -22,49 +27,101 @@ $CheckBackground: linear-gradient(
   --DarkGrayishBlue: hsl(234, 11%, 52%);
   --VeryDarkGrayishBlue: hsl(233, 14%, 35%);
   --VeryDarkGrayishBlue: hsl(237, 14%, 26%);
+
+  --textColor: var(--LightGrayishBlue);
+  --inputBg: var(--VeryDarkDesaturatedBlue);
+  --controlColor: var(--DarkGrayishBlue);
+  --borderColor: var(--VeryDarkGrayishBlue);
+}
+$input-height: 3.8em;
+
+@keyframes smoothIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-$input-height: 3em;
+// @mixin listoutput {
+//   height: 100%;
+//   width: $input-height;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   position: relative;
+
+//   input[type="checkbox"] {
+//     appearance: none;
+//     height: 1em;
+//     width: 1em;
+//     z-index: 4;
+//     cursor: pointer;
+//   }
+
+//   .tick {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     z-index: 2;
+//   }
+
+//   label {
+//     position: absolute;
+//     top: 50%;
+//     transform: translate(0, -50%);
+//     z-index: 2;
+//     height: 1.4em;
+//     width: 1.4em;
+//     padding: 0.5em;
+//     border-radius: 50%;
+//     border: solid 1px var(--borderColor);
+//     background-color: var(--inputBg);
+// }
 
 .todo {
   font-family: "Josefin Sans", sans-serif;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   width: 100%;
-  overflow: hidden;
-  font-size: 18px;
-  color: var(--LightGrayishBlue);
-  background-color: var(--VeryDarkGrayishBlue);
-  background-color: var(--VeryDarkBlue);
+  position: relative;
 
   img {
-    min-height: 30vh;
     width: 100vw;
     object-fit: cover;
   }
 
   .container {
-    position: absolute;
-    inset: 0;
-    top: 10%;
+    position: relative;
+    // inset: 0;
+    // top: -12%;
+    margin-top: -12em;
     display: flex;
     align-items: center;
     flex-direction: column;
     margin-inline: auto;
-    width: clamp(20em, 80vw + 10vw, 30vw);
+    width: clamp(30em, 30em + 10vw, 40vw);
+    font-size: 1rem;
     height: fit-content;
+
+    .info {
+      margin: 3em 0;
+      color: var(--DarkGrayishBlue);
+      font-size: 0.8rem;
+    }
 
     .header {
       display: flex;
       align-items: center;
       height: fit-content;
       width: 100%;
-      color: hsl(0, 0%, 98%);
-      color: var(--VeryDarkBlue);
-      color: var(--VeryLightGray);
 
       h1 {
-        font-size: 2.2em;
+        font-size: 1.5rem;
         font-weight: 700;
+        color: hsl(0, 0%, 98%);
       }
 
       .icon {
@@ -86,17 +143,21 @@ $input-height: 3em;
       width: 100%;
       margin: 1.5em 0 0.5em 0;
       isolation: isolate;
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.1);
+      border-radius: 0.25em;
+      background-color: var(--inputBg);
+      padding: 0 0.5em 0 0.5em;
 
       input[type="text"] {
         width: 100%;
         height: 100%;
-        border-radius: 0.2em;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        font-size: 18px;
         text-indent: 3%;
         outline: none;
         border: none;
+        font-size: 1rem;
+        caret-color: #5960d3;
+        color: var(--textColor);
+        background-color: transparent;
       }
 
       .checkbox {
@@ -106,9 +167,7 @@ $input-height: 3em;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: white;
-        border-top-left-radius: 0.2em;
-        border-bottom-left-radius: 0.2em;
+        background-color: transparent;
 
         input[type="checkbox"] {
           appearance: none;
@@ -123,22 +182,22 @@ $input-height: 3em;
           top: 50%;
           transform: translate(0, -50%);
           z-index: 2;
-          height: 0.3em;
-          width: 0.3em;
+          height: 1.4em;
+          width: 1.4em;
           padding: 0.5em 0.5em;
           border-radius: 50%;
-          border: solid 1px hsl(210, 12%, 84%);
-          background-color: white;
+          border: solid 1px var(--borderColor);
+          background-color: var(--inputBg);
 
           &::before {
             position: absolute;
-            right: 35%;
-            top: 28%;
+            right: 30%;
+            top: 25%;
             content: "";
-            height: 10px;
+            height: 9px;
             width: 2px;
             border-radius: 100px;
-            background-color: white;
+            background-color: transparent;
             transform: rotate(45deg);
           }
 
@@ -150,7 +209,7 @@ $input-height: 3em;
             height: 5px;
             width: 2px;
             border-radius: 100px;
-            background-color: white;
+            background-color: transparent;
             transform: rotate(-45deg);
           }
         }
@@ -160,8 +219,8 @@ $input-height: 3em;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          height: 1.1em;
-          width: 1.1em;
+          height: 1.5em;
+          width: 1.5em;
           transition: all 0.3s;
           background-image: $CheckBackground;
           border-radius: 50%;
@@ -173,16 +232,20 @@ $input-height: 3em;
         input[type="checkbox"]:checked ~ label {
           border: 0;
           background-image: $CheckBackground;
+          // &::after,&::before{
+          //   background-color: white;
+          // }
         }
 
-        input[type="checkbox"]:hover ~ .hoverstate {
-          display: block;
+        input[type="checkbox"]:hover ~ label {
+          border: 0;
         }
+
         input[type="checkbox"]:checked ~ .hoverstate {
           display: none;
         }
-        input[type="checkbox"]:hover ~ label {
-          border: 0;
+        input[type="checkbox"]:hover ~ .hoverstate {
+          display: block;
         }
       }
     }
@@ -190,43 +253,36 @@ $input-height: 3em;
     .output {
       margin-top: 1em;
       width: 100%;
-      height: max-content;
-      border-radius: 0.2em;
-      box-shadow: 0 0 5px 0 hsl(233, 11%, 84%);
+      border-radius: 0.25em;
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.1);
       position: relative;
-      background-color: white;
-
-      small {
-        position: absolute;
-        top: 110%;
-        min-width: 100%;
-        text-align: center;
-        color: var(--DarkGrayishBlue);
-        margin: 2em 0;
-      }
+      background-color: var(--inputBg);
 
       .out {
-        max-height: 50vh;
+        max-height: 23.8em;
         overflow: hidden;
+
+        .finished {
+          text-decoration: line-through;
+          color: var(--DarkGrayishBlue);
+        }
+        li {
+          margin-left: 1em;
+          color: var(--textColor);
+          font-weight: 400;
+          transition: all 0.3s;
+          cursor: pointer;
+          font-size: 1rem;
+        }
 
         .todoitem {
           margin: 0.1em 0;
           height: $input-height;
-          border-bottom: solid hsl(233, 11%, 84%) 1px;
+          border-bottom: solid 1px var(--borderColor);
           display: flex;
           align-items: center;
-
-          li {
-            margin-left: 1em;
-            font-size: 18px;
-            color: var(--VeryDarkGrayishBlue);
-            font-weight: 700;
-            transition: all 0.3s;
-          }
-          .finished {
-            text-decoration: line-through;
-            color: var(--DarkGrayishBlue);
-          }
+          font-size: 1rem;
+          animation: smoothIn 1s;
 
           .check {
             height: 100%;
@@ -240,8 +296,16 @@ $input-height: 3em;
               appearance: none;
               height: 1em;
               width: 1em;
-              z-index: 3;
+              z-index: 4;
               cursor: pointer;
+            }
+
+            .tick {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              z-index: 2;
             }
 
             label {
@@ -249,36 +313,36 @@ $input-height: 3em;
               top: 50%;
               transform: translate(0, -50%);
               z-index: 2;
-              height: 0.3em;
-              width: 0.3em;
+              height: 1.4em;
+              width: 1.4em;
               padding: 0.5em;
               border-radius: 50%;
-              border: solid 1px hsl(210, 12%, 84%);
-              background-color: white;
+              border: solid 1px var(--borderColor);
+              background-color: var(--inputBg);
 
-              &::before {
-                position: absolute;
-                right: 35%;
-                top: 28%;
-                content: "";
-                height: 10px;
-                width: 2px;
-                border-radius: 100px;
-                background-color: white;
-                transform: rotate(45deg);
-              }
+              // &::before {
+              //   position: absolute;
+              //   right: 30%;
+              //   top: 25%;
+              //   content: "";
+              //   height: 9px;
+              //   width: 2px;
+              //   border-radius: 100px;
+              //   background-color: transparent;
+              //   transform: rotate(45deg);
+              // }
 
-              &::after {
-                position: absolute;
-                top: 50%;
-                left: 31%;
-                content: "";
-                height: 5px;
-                width: 2px;
-                border-radius: 100px;
-                background-color: white;
-                transform: rotate(-45deg);
-              }
+              // &::after {
+              //   position: absolute;
+              //   top: 50%;
+              //   left: 31%;
+              //   content: "";
+              //   height: 5px;
+              //   width: 2px;
+              //   border-radius: 100px;
+              //   background-color: transparent;
+              //   transform: rotate(-45deg);
+              // }
             }
 
             .hoverstate {
@@ -286,8 +350,8 @@ $input-height: 3em;
               top: 50%;
               left: 50%;
               transform: translate(-50%, -50%);
-              height: 1.15em;
-              width: 1.15em;
+              height: 1.5em;
+              width: 1.5em;
               transition: all 0.3s;
               background-image: $CheckBackground;
               border-radius: 50%;
@@ -298,23 +362,22 @@ $input-height: 3em;
             input[type="checkbox"]:hover ~ .hoverstate {
               display: block;
             }
-            input[type="checkbox"][focused="true"]:checked ~ .hoverstate {
+            input[type="checkbox"]:checked ~ .hoverstate {
               display: none;
             }
-            input[type="checkbox"][focused="true"]:checked ~ label {
+            input[type="checkbox"]:checked ~ .tick {
+              z-index: 3;
+            }
+            input[type="checkbox"]:checked ~ label {
               border: 0;
               background-image: $CheckBackground;
+              // &::after,
+              // &::before {
+              //   background-color: white;
+              // }
             }
             input[type="checkbox"]:hover ~ label {
               border: 0;
-            }
-          }
-          @keyframes smoothIn {
-            from {
-              opacity: 0;
-            }
-            to {
-              opacity: 1;
             }
           }
 
@@ -324,32 +387,90 @@ $input-height: 3em;
             border: none;
             outline: none;
             cursor: pointer;
-            padding: 0.5em;
             position: relative;
             animation: smoothIn 1s;
 
-            &::before {
-              position: absolute;
-              content: "";
-              inset: 0;
-              height: 100%;
-              width: 0.1em;
-              background-color: hsl(236, 9%, 61%);
-              transform: rotate(45deg);
-              border-radius: 0.2em;
-            }
-            &::after {
-              position: absolute;
-              content: "";
-              inset: 0;
-              height: 100%;
-              width: 0.1em;
-              background-color: hsl(236, 9%, 61%);
-              transform: rotate(-45deg);
-              border-radius: 0.2em;
-            }
+            // padding: 0.5em;
+            // &::before {
+            //   position: absolute;
+            //   content: "";
+            //   inset: 0;
+            //   height: 100%;
+            //   width: 0.1em;
+            //   background-color: hsl(236, 9%, 61%);
+            //   transform: rotate(45deg);
+            //   border-radius: 0.25em;
+            // }
+            // &::after {
+            //   position: absolute;
+            //   content: "";
+            //   inset: 0;
+            //   height: 100%;
+            //   width: 0.1em;
+            //   background-color: hsl(236, 9%, 61%);
+            //   transform: rotate(-45deg);
+            //   border-radius: 0.25em;
+            // }
           }
         }
+
+        // .completed {
+        //   li {
+        //     margin: 0.1em 0;
+        //     height: $input-height;
+        //     border-bottom: solid 1px var(--borderColor);
+        //     display: flex;
+        //     align-items: center;
+        //     font-size: 1rem;
+        //     animation: smoothIn 1s;
+
+        //     .check {
+        //       height: 100%;
+        //       width: $input-height;
+        //       display: flex;
+        //       align-items: center;
+        //       justify-content: center;
+        //       position: relative;
+
+        //       input[type="checkbox"] {
+        //         appearance: none;
+        //         height: 1em;
+        //         width: 1em;
+        //         z-index: 4;
+        //         cursor: pointer;
+        //       }
+
+        //       .tick {
+        //         position: absolute;
+        //         top: 50%;
+        //         left: 50%;
+        //         transform: translate(-50%, -50%);
+        //         z-index: 2;
+        //       }
+
+        //       label {
+        //         position: absolute;
+        //         top: 50%;
+        //         transform: translate(0, -50%);
+        //         z-index: 2;
+        //         height: 1.4em;
+        //         width: 1.4em;
+        //         padding: 0.5em;
+        //         border-radius: 50%;
+        //         border: solid 1px var(--borderColor);
+        //         background-color: var(--inputBg);
+        //       }
+
+        //       input[type="checkbox"]:checked ~ .tick {
+        //         z-index: 3;
+        //       }
+        //       input[type="checkbox"]:checked ~ label {
+        //         border: 0;
+        //         background-image: $CheckBackground;
+        //       }
+        //     }
+        //   }
+        // }
       }
 
       .controls {
@@ -357,42 +478,51 @@ $input-height: 3em;
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        background-color: hsl(0, 0%, 98%);
-        height: $input-height;
-        padding: 0 1em;
+        border-bottom-left-radius: 0.2em;
+        border-bottom-right-radius: 0.2em;
+        background-color: var(--inputBg);
+        height: calc($input-height - 1em);
+        padding: 0 1.5em;
 
         .left {
+          flex: 1;
           p {
-            font-size: 13px;
+            font-size: 0.8rem;
             font-weight: 400;
-            color: hsl(236, 9%, 61%);
+            color: var(--controlColor);
           }
         }
 
         .center {
+          flex: 1.5;
+          text-align: center;
           button {
             outline: 0;
             border: 0;
             background-color: transparent;
             margin: 0 0.5em;
             font-weight: 700;
-            color: hsl(236, 9%, 61%);
+            color: var(--controlColor);
             cursor: pointer;
             transition: color 0.3s;
-            &:hover {
+
+            &:is(:active, :hover) {
               color: $BrightBlue;
             }
           }
         }
         .right {
+          flex: 1;
+          text-align: right;
           button {
             outline: 0;
             border: 0;
             background-color: transparent;
             cursor: pointer;
             font-weight: 400;
-            color: hsl(236, 9%, 61%);
+            color: var(--controlColor);
             transition: color 0.3s;
+
             &:hover {
               color: $BrightBlue;
             }
@@ -404,15 +534,30 @@ $input-height: 3em;
 }
 
 @media screen and(max-width:650px) {
-  $line-height: 2.6em;
+  .todo {
+    img {
+      min-height: 12em !important;
+      max-height: 30vh;
+    }
 
-  .container {
-  top: 5% !important;
+    .container {
+      margin-top: -11em !important;
+      width: 90vw !important;
+      height: fit-content;
 
+      .inputbox {
+        height: 3.4em !important;
+      }
+    }
 
-    .header{
+    .info {
+      margin: 10em 0 2em 0 !important;
+    }
+
+    .header {
+      margin-bottom: 0.5em;
       h1 {
-        font-size: 1.5em !important;
+        font-size: 1.8rem !important;
       }
 
       .icon {
@@ -423,63 +568,33 @@ $input-height: 3em;
           cursor: pointer;
         }
       }
-
-  }
-
-
-
-  .controls {
-    position: relative;
-
-
-    }
-  
-
-    .left {
-      flex: 1;
-    }
-    .right {
-      flex: 1;
-      display: inline-flex;
-      justify-content: flex-end;
     }
 
-    .center {
-      position: absolute;
-      left: 0;
-      bottom: -150%;
-      height: 90%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      background-color: white;
-      box-shadow: 0 0 10px 0 hsl(233, 11%, 84%);
-      border-radius: 0.2em;
-    }
-  }
-  .container {
-    height: 30em;
-    width: 90vw !important;
-    .output {
-      height: 100%;
-      width: 100%;
+    .controls {
+      position: relative;
+      height: 3.5em !important;
 
-      .info {
-        margin: 2em 0;
-        bottom: -80%;
+      .left {
+        flex: 1;
+      }
+      .right {
+        flex: 1;
         display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
       }
 
-      .out {
-        // min-height: 35vh !important;
-        max-height: 38vh !important;
-
-        .todoitem {
-          height: 2.5em !important;
-        }
+      .center {
+        position: absolute;
+        left: 0;
+        bottom: -150%;
+        height: 3.4em !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: var(--inputBg);
+        box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 0.25em;
       }
     }
   }

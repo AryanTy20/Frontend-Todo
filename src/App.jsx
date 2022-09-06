@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import "./app.scss";
 
-import { Todo, TodoNew } from "./Components";
+import { Todo } from "./Components";
 
 const App = () => {
   return (

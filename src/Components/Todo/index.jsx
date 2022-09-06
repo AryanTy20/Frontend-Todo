@@ -11,12 +11,22 @@ import {
   SunIcon,
 } from "../../../assets/Todo";
 
+import { useWindowsSize, useLocalStorage } from "../../Hooks";
+
 const Todo = () => {
-  const [theme, setTheme] = useState("light");
+  const [height, width] = useWindowsSize();
+  const [storeTheme, getTheme] = useLocalStorage();
+  const [theme, setTheme] = useState(() => {
+    const data = getTheme("theme");
+    if (data) return data;
+    return "light";
+  });
   const [todo, setTodo] = useState([]);
+  const [addTodo, setAddTodo] = useState(false);
   const [todoCompleted, setTodoCompleted] = useState([]);
   const [isDeleted, setisDeleted] = useState(false);
   const [isScrollable, setIsScrollable] = useState(false);
+  const [showComplete, setShowComplete] = useState(false);
   const [value, setValue] = useState({
     todo: "",
     done: false,
@@ -25,10 +35,11 @@ const Todo = () => {
   const dragOverRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  // useEffect(() => {
-  //   document.getElementsByTagName("body")[0].classList.toggle(theme);
-  //   // bodyRef.current && bodyRef.current.classList.toggle(theme);
-  // }, [theme]);
+  useEffect(() => {
+    storeTheme("theme", theme);
+    document.body.style.backgroundColor =
+      theme == "dark" ? "hsl(235, 21%, 11%)" : "hsl(0, 0%, 98%)";
+  }, [theme]);
 
   const handleSort = (t) => {
     if (dragItemRef.current == dragOverRef.current) return;
@@ -38,12 +49,17 @@ const Todo = () => {
     dragItemRef.current = null;
     dragOverRef.current = null;
     setTodo(copyTodo);
-    setTodoCompleted([
-      ...new Map(todoCompleted.map((item) => [item["todo"], item])).values(),
-    ]);
   };
 
   const addToTodo = (item) => {
+    if (todo.some((el) => el.todo == item.todo)) {
+      alert("Todo already exits");
+      setValue({
+        todo: "",
+        done: false,
+      });
+      return;
+    }
     setTodo((prev) => [...prev, item]);
     setValue({
       todo: "",
@@ -56,12 +72,10 @@ const Todo = () => {
     const index = copyTodo.findIndex((el) => el.todo == todo[id].todo);
     copyTodo.splice(index, 1);
     setTodo(copyTodo);
+    setisDeleted(!isDeleted);
   };
 
   const clearComplete = () => {
-    setTodoCompleted([
-      ...new Map(todoCompleted.map((item) => [item["todo"], item])).values(),
-    ]);
     const key = todoCompleted.map((item) => item.todo);
     setTodo(todo.filter((item) => !key.includes(item.todo)));
     setTodoCompleted([]);
@@ -70,10 +84,15 @@ const Todo = () => {
 
   return (
     <>
-      <div className={`todo ${theme == "light" ? "light" : "dark"}`}>
-        <img src={theme == "light" ? bgDLight : bgDDark} />
+      <main className={`todo ${theme == "light" ? "light" : "dark"}`}>
+        {width < 600 ? (
+          <img src={theme == "light" ? bgMLight : bgMDark} />
+        ) : (
+          <img src={theme == "light" ? bgDLight : bgDDark} />
+        )}
+
         <div className="container">
-          <div className="header">
+          <header className="header">
             <h1>TODO</h1>
             <div className="icon">
               {theme == "light" ? (
@@ -106,14 +125,20 @@ const Todo = () => {
                 </div>
               )}
             </div>
-          </div>
+          </header>
 
           <div className="inputbox">
-            <div
-              className="checkbox"
-              onClick={() => value.todo.length > 0 && addToTodo(value)}
-            >
-              <input type="checkbox" />
+            <div className="checkbox">
+              <input
+                type="checkbox"
+                checked={addTodo}
+                onChange={(e) => {
+                  if (!value.todo.length > 0) return;
+                  setAddTodo(e.target.checked);
+                  addToTodo(value);
+                  setTimeout(() => setAddTodo(false), 200);
+                }}
+              />
               <label htmlFor="checkbox"></label>
               <span className="hoverstate"></span>
             </div>
@@ -132,46 +157,90 @@ const Todo = () => {
               className="out"
               style={{ overflowY: isScrollable ? "scroll" : "hidden" }}
             >
-              {todo?.map((task, i) => (
-                <TodoItem
-                  key={i}
-                  id={i}
-                  task={task}
-                  allTodo={todo}
-                  setTodo={setTodo}
-                  handleSort={handleSort}
-                  isDeleted={isDeleted}
-                  setisDeleted={setisDeleted}
-                  dragRef={dragItemRef}
-                  overRef={dragOverRef}
-                  todoCompleted={todoCompleted}
-                  setTodoCompleted={setTodoCompleted}
-                  removeTodo={removeTodo}
-                  setIsDragging={setIsDragging}
-                  isDragging={isDragging}
-                />
-              ))}
+              {!showComplete &&
+                todo?.map((task, i) => (
+                  <TodoItem
+                    key={i}
+                    id={i}
+                    task={task}
+                    allTodo={todo}
+                    setTodo={setTodo}
+                    handleSort={handleSort}
+                    isDeleted={isDeleted}
+                    dragRef={dragItemRef}
+                    overRef={dragOverRef}
+                    todoCompleted={todoCompleted}
+                    setTodoCompleted={setTodoCompleted}
+                    removeTodo={removeTodo}
+                    setIsDragging={setIsDragging}
+                    isDragging={isDragging}
+                  />
+                ))}
+
+              {showComplete &&
+                todoCompleted?.map((item, i) => (
+                  <Completed item={item} key={i} />
+                ))}
             </div>
+
             <div className="controls">
               <div className="left">
-                <p>{todo.length} item left</p>
+                <p>{todo.length - todoCompleted.length} item left</p>
               </div>
               <div className="center">
-                <button onClick={() => setIsScrollable(!isScrollable)}>
+                <button
+                  onClick={() => {
+                    setIsScrollable(!isScrollable);
+                    setShowComplete(false);
+                  }}
+                >
                   All
                 </button>
                 <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => setShowComplete(true)}>Completed</button>
               </div>
               <div className="right">
-                <button onClick={clearComplete}>Clear Complete</button>
+                <button
+                  onClick={() => {
+                    clearComplete();
+                    setShowComplete(false);
+                  }}
+                >
+                  Clear Complete
+                </button>
               </div>
             </div>
-            {todo.length > 1 && (
-              <small className="info">Drag and Drop to reorder List</small>
-            )}
           </div>
+          {todo.length > 1 && (
+            <small className="info">Drag and Drop to reorder List</small>
+          )}
         </div>
+      </main>
+    </>
+  );
+};
+
+const Completed = ({ item }) => {
+  return (
+    <>
+      <div className="todoitem">
+        <div className="check">
+          <input type="checkbox" checked={item.done} readOnly={true} />
+
+          <label htmlFor="checkbox"></label>
+          <span className="tick">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9">
+              <path
+                fill="none"
+                stroke="#FFF"
+                strokeWidth="2"
+                d="M1 4.304L3.696 7l6-6"
+              />
+            </svg>
+          </span>
+          <div className="hoverstate"></div>
+        </div>
+        <li className={item.done ? "finished" : ""}>{item.todo}</li>
       </div>
     </>
   );
@@ -187,7 +256,6 @@ const TodoItem = (props) => {
     overRef,
     handleSort,
     isDeleted,
-    setisDeleted,
     todoCompleted,
     setTodoCompleted,
     removeTodo,
@@ -195,11 +263,12 @@ const TodoItem = (props) => {
     setIsDragging,
   } = props;
   const [isChecked, setIsChecked] = useState(task.done);
-
+  const [height, width] = useWindowsSize();
   const [hover, setHover] = useState(false);
 
   useEffect(() => {
     if (isChecked) {
+      if (todoCompleted.some((el) => el.todo == task.todo)) return;
       setTodoCompleted((prev) => [
         ...prev,
         {
@@ -246,21 +315,44 @@ const TodoItem = (props) => {
         <div className="check">
           <input
             type="checkbox"
-            focused={isChecked.toString()}
+            // focused={isChecked.toString()}
             checked={isChecked}
             onChange={(e) => setIsChecked(e.target.checked)}
           />
+
           <label htmlFor="checkbox"></label>
+          <span className="tick">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9">
+              <path
+                fill="none"
+                stroke="#FFF"
+                strokeWidth="2"
+                d="M1 4.304L3.696 7l6-6"
+              />
+            </svg>
+          </span>
           <div className="hoverstate"></div>
         </div>
-        <li className={isChecked ? "finished" : ""}>{task.todo}</li>
-        {hover && (
+        <li
+          className={isChecked ? "finished" : ""}
+          onClick={() => setIsChecked(!isChecked)}
+        >
+          {task.todo}
+        </li>
+        {(hover || width < 600) && (
           <span
             onClick={() => {
               removeTodo(id);
-              setisDeleted(!isDeleted);
             }}
-          ></span>
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+              <path
+                fill="#494C6B"
+                fillRule="evenodd"
+                d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+              />
+            </svg>
+          </span>
         )}
       </div>
     </>
