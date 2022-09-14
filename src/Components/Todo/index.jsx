@@ -18,6 +18,8 @@ const Todo = () => {
   const [isDeleted, setisDeleted] = useState(false);
   const [isScrollable, setIsScrollable] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
+  const [showActive, setShowActive] = useState(false);
+  const [active, setActive] = useState([]);
   const [value, setValue] = useState({
     todo: "",
     done: false,
@@ -72,6 +74,21 @@ const Todo = () => {
     setTodoCompleted([]);
     setisDeleted(!isDeleted);
   };
+
+  useEffect(() => {
+    setActive([]);
+    const at = todo.map((el) => el.todo);
+    const ct = todoCompleted.map((el) => el.todo);
+    const t = at.filter((el) => !ct.includes(el));
+    setActive(
+      t.map((el) => {
+        return {
+          todo: el,
+          done: false,
+        };
+      })
+    );
+  }, [todoCompleted, todo]);
 
   return (
     <>
@@ -149,6 +166,7 @@ const Todo = () => {
               style={{ overflowY: isScrollable ? "scroll" : "hidden" }}
             >
               {!showComplete &&
+                !showActive &&
                 todo?.map((task, i) => (
                   <TodoItem
                     key={i}
@@ -170,8 +188,11 @@ const Todo = () => {
 
               {showComplete &&
                 todoCompleted?.map((item, i) => (
-                  <Completed item={item} key={i} />
+                  <OtherTodo item={item} key={i} />
                 ))}
+
+              {showActive &&
+                active?.map((item, i) => <OtherTodo item={item} key={i} />)}
             </div>
 
             <div className="controls">
@@ -180,18 +201,32 @@ const Todo = () => {
               </div>
               <div className="center">
                 <button
-                  className={!showComplete ? "active" : ""}
+                  className={isScrollable ? "active" : ""}
                   onClick={() => {
-                    setIsScrollable(!isScrollable);
+                    setIsScrollable(true);
                     setShowComplete(false);
+                    setShowActive(false);
                   }}
                 >
                   All
                 </button>
-                <button>Active</button>
+                <button
+                  className={showActive ? "active" : ""}
+                  onClick={() => {
+                    setShowActive(true);
+                    setIsScrollable(false);
+                    setShowComplete(false);
+                  }}
+                >
+                  Active
+                </button>
                 <button
                   className={showComplete ? "active" : ""}
-                  onClick={() => setShowComplete(true)}
+                  onClick={() => {
+                    setShowComplete(true);
+                    setShowActive(false);
+                    setIsScrollable(false);
+                  }}
                 >
                   Completed
                 </button>
@@ -217,7 +252,7 @@ const Todo = () => {
   );
 };
 
-const Completed = ({ item }) => {
+const OtherTodo = ({ item }) => {
   return (
     <>
       <div className="todoitem">
