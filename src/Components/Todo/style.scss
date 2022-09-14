@@ -445,6 +445,15 @@ $input-height: 3.8em;
   }
 }
 
+.attribution {
+  font-size: 1rem;
+  text-align: center;
+  color: hsl(233, 14%, 35%);
+  a {
+    color: hsl(228, 45%, 44%);
+  }
+}
+
 @media screen and(max-width:650px) {
   .todo {
     img {
@@ -509,5 +518,10 @@ $input-height: 3.8em;
         border-radius: 0.25em;
       }
     }
+  }
+  .attribution {
+    width: 90%;
+    padding: 1em;
+    margin: 1em auto;
   }
 }

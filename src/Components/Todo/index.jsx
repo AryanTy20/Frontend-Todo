@@ -41,7 +41,7 @@ const Todo = () => {
       theme == "dark" ? "hsl(235, 21%, 11%)" : "hsl(0, 0%, 98%)";
   }, [theme]);
 
-  const handleSort = (t) => {
+  const handleSort = () => {
     if (dragItemRef.current == dragOverRef.current) return;
     let copyTodo = [...todo];
     const draggedItem = copyTodo.splice(dragItemRef.current, 1)[0];
