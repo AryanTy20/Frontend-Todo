@@ -1,15 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./style.scss";
-import {
-  bgDDark,
-  bgDLight,
-  bgMDark,
-  bgMLight,
-  CheckIcon,
-  CrossIcon,
-  MoonIcon,
-  SunIcon,
-} from "../../../assets/Todo";
+import { bgDDark, bgDLight, bgMDark, bgMLight } from "../../../assets/Todo";
 
 import { useWindowsSize, useLocalStorage } from "../../Hooks";
 
